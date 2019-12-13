@@ -1,6 +1,7 @@
 import json
 import pprint
 import datetime
+from prettytable import PrettyTable
 
 
 def get_data(filename):
@@ -8,6 +9,7 @@ def get_data(filename):
     with open(filename) as json_file:
         data = json.load(json_file)
         return data
+
 
 def water2int(data):
     '''takes the water after key of each plant and turns its value into
@@ -18,6 +20,7 @@ def water2int(data):
         plant['water_after'] = day_in_int
     return data
 
+
 def weekend_fixer(date):
     '''Inspect the date object for saturday or sunday. 
     sunday add 24 hours to it if saturday subtract 24 hours from it'''
@@ -26,6 +29,7 @@ def weekend_fixer(date):
     elif date.weekday() == 6:
         return date + datetime.timedelta(days=1)
     return date
+
 
 def create_schedule(start_date, water_interval, weeks):
     ''' this creates a schedule of days in which watering occurs'''
@@ -39,6 +43,7 @@ def create_schedule(start_date, water_interval, weeks):
         result.append(weekend_fixer(next_date))
     return result
 
+
 def schedule_per_plant(plant_array, start_date, weeks):
     '''Creates a list of dates key value pair for each plant'''
     # start_date is a datetime object
@@ -46,6 +51,7 @@ def schedule_per_plant(plant_array, start_date, weeks):
     for plant in plant_array:
         plant['schedule'] = create_schedule(start_date, int(plant['water_after']), weeks)
     return plant_array
+
 
 def add_plant_to_day(start_date, plant_array, weeks):
     '''Takes in the modified plant array that includes a schedule for each plant
@@ -63,10 +69,29 @@ def add_plant_to_day(start_date, plant_array, weeks):
                 plant_day_arr.append(plant['name'])
         date_plant_dict[next_date] = plant_day_arr
         next_date += datetime.timedelta(days=1)
-    return date_plant_dict      
+    return date_plant_dict
+
+
+def make_week(date_plant_dict):
+    dates = sorted(date_plant_dict.keys())
+    with open("Plant Schedule.txt", 'w') as file_:
+        while dates:
+            weekly_table = PrettyTable()
+            header = []
+            plants = []
+            for day in dates[:7]:
+                header.append(str(day))
+                plants.append("\n".join(date_plant_dict[day]))
+            dates = dates[7:]
+            weekly_table.field_names = header
+            weekly_table.add_row(plants)
+            file_.write(str(weekly_table) + "\n")
+
+
+
 
 if __name__ == "__main__":
-    weeks = 4
+    weeks = 12
     start_date = datetime.date(month=12, day=16, year=2019)
     plant_array = schedule_per_plant(water2int(get_data("plant_info.json")), start_date, weeks)
-    pprint.pprint(add_plant_to_day(start_date, plant_array, weeks))
+    make_week(add_plant_to_day(start_date, plant_array, weeks))
