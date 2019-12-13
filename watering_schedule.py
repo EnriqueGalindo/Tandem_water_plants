@@ -1,6 +1,9 @@
+#!/usr/bin/env python3
+
 import json
 import datetime
 from prettytable import PrettyTable
+import click
 
 
 def get_data(filename):
@@ -45,7 +48,7 @@ def create_schedule(start_date, water_interval, weeks):
 
 def schedule_per_plant(plant_array, start_date, weeks):
     '''Creates a list of dates key value pair for each plant'''
-    # start_date is a datetime object
+    # start_date is a string
     # weeks is an integer
     for plant in plant_array:
         plant['schedule'] = create_schedule(start_date,
@@ -74,7 +77,7 @@ def add_plant_to_day(start_date, plant_array, weeks):
 
 def make_week(date_plant_dict):
     '''This takes the dictionary date_plant_dict and formats it into
-        7 day increments so that it's easy to make pretty tables out of it'''
+    7 day increments so that it's easy to make pretty tables out of it'''
     dates = sorted(date_plant_dict.keys())
     with open("Plant Schedule.txt", 'w') as file_:
         while dates:
@@ -90,9 +93,22 @@ def make_week(date_plant_dict):
             file_.write(str(weekly_table) + "\n")
 
 
-if __name__ == "__main__":
-    weeks = 12
-    start_date = datetime.date(month=12, day=16, year=2019)
+@click.command()
+@click.option("--weeks", prompt="Enter number of weeks",
+              help="Number of weeks to schedule", type=click.INT, default=12)
+@click.option("--start_date", prompt="Starting date as(mm-dd-yyyy)",
+              help="Date to begin", type=click.STRING, default="12-16-2019")
+def main(weeks, start_date):
+    '''This function was made in order to use the click command so that there
+    would be a command line prompt. The default for the click is what was
+    assigned,being 12 weeks starting from Monday the 16th 2019, but it also
+    allows for dynamic starting days and lengths of time'''
+    start_date = datetime.datetime.strptime(start_date, '%m-%d-%Y')
     plant_array = schedule_per_plant(water2int(get_data("plant_info.json")),
                                      start_date, weeks)
     make_week(add_plant_to_day(start_date, plant_array, weeks))
+    print("Your schedule is now available in 'Plant Schedule.txt'")
+
+
+if __name__ == "__main__":
+    main()

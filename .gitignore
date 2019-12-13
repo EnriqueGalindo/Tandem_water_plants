@@ -2,3 +2,4 @@
 .venv/
 .history/
 .DS_Store
+*.txt
