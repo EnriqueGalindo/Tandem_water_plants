@@ -1,5 +1,4 @@
 import json
-import pprint
 import datetime
 from prettytable import PrettyTable
 
@@ -22,7 +21,7 @@ def water2int(data):
 
 
 def weekend_fixer(date):
-    '''Inspect the date object for saturday or sunday. 
+    '''Inspect the date object for saturday or sunday.
     sunday add 24 hours to it if saturday subtract 24 hours from it'''
     if date.weekday() == 5:
         return date - datetime.timedelta(days=1)
@@ -49,7 +48,8 @@ def schedule_per_plant(plant_array, start_date, weeks):
     # start_date is a datetime object
     # weeks is an integer
     for plant in plant_array:
-        plant['schedule'] = create_schedule(start_date, int(plant['water_after']), weeks)
+        plant['schedule'] = create_schedule(start_date,
+                                            int(plant['water_after']), weeks)
     return plant_array
 
 
@@ -73,6 +73,8 @@ def add_plant_to_day(start_date, plant_array, weeks):
 
 
 def make_week(date_plant_dict):
+    '''This takes the dictionary date_plant_dict and formats it into
+        7 day increments so that it's easy to make pretty tables out of it'''
     dates = sorted(date_plant_dict.keys())
     with open("Plant Schedule.txt", 'w') as file_:
         while dates:
@@ -88,10 +90,9 @@ def make_week(date_plant_dict):
             file_.write(str(weekly_table) + "\n")
 
 
-
-
 if __name__ == "__main__":
     weeks = 12
     start_date = datetime.date(month=12, day=16, year=2019)
-    plant_array = schedule_per_plant(water2int(get_data("plant_info.json")), start_date, weeks)
+    plant_array = schedule_per_plant(water2int(get_data("plant_info.json")),
+                                     start_date, weeks)
     make_week(add_plant_to_day(start_date, plant_array, weeks))
