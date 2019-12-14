@@ -1,4 +1,9 @@
 #!/usr/bin/env python3
+'''
+Watering schedule maker. Given a date; an amount of weeks; and a .json file of
+plant names and how often they need to be watered it returns a pretty table of
+each day in the timespan given with the plants that need to be watered each day
+'''
 
 import json
 import datetime
@@ -46,14 +51,14 @@ def create_schedule(start_date, water_interval, weeks):
     return result
 
 
-def schedule_per_plant(plant_array, start_date, weeks):
+def schedule_per_plant(plant_dict, start_date, weeks):
     '''Creates a list of dates key value pair for each plant'''
     # start_date is a string
     # weeks is an integer
-    for plant in plant_array:
+    for plant in plant_dict:
         plant['schedule'] = create_schedule(start_date,
                                             int(plant['water_after']), weeks)
-    return plant_array
+    return plant_dict
 
 
 def add_plant_to_day(start_date, plant_array, weeks):
