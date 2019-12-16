@@ -10,31 +10,27 @@ import datetime
 from prettytable import PrettyTable
 import click
 
+#globals
+frequency_file = "plant_info.json"
+one_day = datetime.timedelta(days=1)
 
-def get_data(filename):
-    '''reads the json file and assigns it to a variable'''
+
+def get_frequency_table(filename):
+    '''Returns a table of plants and their integer watering frequencies.'''
     with open(filename) as json_file:
         data = json.load(json_file)
+        for plant in data:
+            plant['water_after'] = int(plant['water_after'].split()[0])
         return data
-
-
-def water2int(data):
-    '''takes the water after key of each plant and turns its value into
-    an integer'''
-    for plant in data:
-        string = plant['water_after']
-        day_in_int = string.split(" ")[0]
-        plant['water_after'] = day_in_int
-    return data
 
 
 def weekend_fixer(date):
     '''Inspect the date object for saturday or sunday.
     sunday add 24 hours to it if saturday subtract 24 hours from it'''
     if date.weekday() == 5:
-        return date - datetime.timedelta(days=1)
+        return date - one_day
     elif date.weekday() == 6:
-        return date + datetime.timedelta(days=1)
+        return date + one_day
     return date
 
 
@@ -57,7 +53,7 @@ def schedule_per_plant(plant_dict, start_date, weeks):
     # weeks is an integer
     for plant in plant_dict:
         plant['schedule'] = create_schedule(start_date,
-                                            int(plant['water_after']), weeks)
+                                            plant['water_after'], weeks)
     return plant_dict
 
 
@@ -76,7 +72,7 @@ def add_plant_to_day(start_date, plant_array, weeks):
             if next_date in plant['schedule']:
                 plant_day_arr.append(plant['name'])
         date_plant_dict[next_date] = plant_day_arr
-        next_date += datetime.timedelta(days=1)
+        next_date += one_day
     return date_plant_dict
 
 
@@ -90,12 +86,18 @@ def make_week(date_plant_dict):
             header = []
             plants = []
             for day in dates[:7]:
-                header.append(str(day))
+                header.append(day.strftime('%m-%d-%Y'))
                 plants.append("\n".join(date_plant_dict[day]))
             dates = dates[7:]
             weekly_table.field_names = header
             weekly_table.add_row(plants)
             file_.write(str(weekly_table) + "\n")
+
+
+def create_plant_array(weeks, start_date):
+    return schedule_per_plant(
+        get_frequency_table(frequency_file), start_date, weeks
+        )
 
 
 @click.command()
@@ -109,11 +111,10 @@ def main(weeks, start_date):
     assigned,being 12 weeks starting from Monday the 16th 2019, but it also
     allows for dynamic starting days and lengths of time'''
     start_date = datetime.datetime.strptime(start_date, '%m-%d-%Y')
-    plant_array = schedule_per_plant(water2int(get_data("plant_info.json")),
-                                     start_date, weeks)
+    plant_array = create_plant_array(weeks, start_date)
     make_week(add_plant_to_day(start_date, plant_array, weeks))
-    print("Your schedule is now available in 'Plant Schedule.txt'")
 
 
 if __name__ == "__main__":
     main()
+    print("Your schedule is now available in 'Plant Schedule.txt'")
