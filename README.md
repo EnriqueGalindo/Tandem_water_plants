@@ -1,4 +1,4 @@
-![LOGO](http://url/to/img.png)
+![LOGO](happy_flower.jpeg)
 # Watering Schedule Maker
 > A take home programming challenge for Tandem Chicago
 
