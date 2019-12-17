@@ -1,39 +1,37 @@
+![LOGO](http://url/to/img.png)
 # Watering Schedule Maker
 > A take home programming challenge for Tandem Chicago
 
 An application that generates a watering schedule for the next 12 weeks for all of the plants starting next Monday, December 16th, 2019.
 
+## Quickstart
+
+`$ pip install pipenv`
+`$ git clone https://github.com/EnriqueGalindo/Tandem_water_plants.git`
+`$ cd Tandem_water_plants`
+`$ Tandem_water_plants git:(master) pipenv install`
+`$ Tandem_water_plants git:(master) pipenv run python watering_schedule.py`
+```
++-------------------+------------+------------+-------------------+------------+------------+------------+
+|     12-16-2019    | 12-17-2019 | 12-18-2019 |     12-19-2019    | 12-20-2019 | 12-21-2019 | 12-22-2019 |
++-------------------+------------+------------+-------------------+------------+------------+------------+
+|  Fiddle Leaf Fig  |            | Wavy Fern  |  Bird's Nest Fern | Wavy Fern  |            |            |
+|    Snake Plant    |            |            | Bell Pepper Plant |            |            |            |
+|     Money Tree    |            |            |  Strawberry Plant |            |            |            |
+|  Bird's Nest Fern |            |            |                   |            |            |            |
+|       Croton      |            |            |                   |            |            |            |
+| Bell Pepper Plant |            |            |                   |            |            |            |
+```
+
 ## Installing / Getting started
 
-`<$ git clone https://github.com/EnriqueGalindo/Tandem_water_plants.git>`
-```
-Cloning into 'Tandem_water_plants'...
-remote: Enumerating objects: 39, done.
-remote: Counting objects: 100% (39/39), done.
-remote: Compressing objects: 100% (30/30), done.
-remote: Total 39 (delta 16), reused 29 (delta 6), pack-reused 0
-Unpacking objects: 100% (39/39), done.
-```
-`<$ cd Tandem_water_plants >`
+`$ git clone https://github.com/EnriqueGalindo/Tandem_water_plants.git`
 
-`<Tandem_water_plants git:(master) $ pipenv install>`
-```
-Creating a virtualenv for this project…
-Pipfile: /Users/user/Projects/Tandem_water_plants/Pipfile
-Using /usr/local/Cellar/python/3.7.4/Frameworks/Python.framework/Versions/3.7/bin/python3.7m (3.7.4) to create virtualenv…
-⠹Running virtualenv with interpreter /usr/local/Cellar/python/3.7.4/Frameworks/Python.framework/Versions/3.7/bin/python3.7m
-Using base prefix '/usr/local/Cellar/python/3.7.4/Frameworks/Python.framework/Versions/3.7'
-New python executable in /Users/username/Projects/Tandem_water_plants/.venv/bin/python3.7
-Also creating executable in /Users/username/Projects/Tandem_water_plants/.venv/bin/python
-Installing setuptools, pip, wheel...
-done.
-Virtualenv location: /Users/user/Projects/Tandem_water_plants/.venv
-Installing dependencies from Pipfile.lock (a1cb5a)…
-  🐍   ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ 2/2 — 00:00:02
-To activate this project's virtualenv, run pipenv shell.
-Alternatively, run a command inside the virtualenv with pipenv run.
-```
-`<Tandem_water_plants git:(master) $ pipenv run python watering_schedule.py>`
+`$ cd Tandem_water_plants`
+
+`$ Tandem_water_plants git:(master) pipenv install`
+
+`$ Tandem_water_plants git:(master) pipenv run python watering_schedule.py`
 ```
 Enter number of weeks [12]: 
 ```
@@ -50,7 +48,7 @@ Your schedule is now available in 'watering_schedule.txt'
 
 you will need python3 installed
 you will need to have pipenv installed 
-`<pip install pipenv>`
+`pip install pipenv`
 
 ## Features
 
