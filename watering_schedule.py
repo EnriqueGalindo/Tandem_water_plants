@@ -10,9 +10,10 @@ import datetime
 from prettytable import PrettyTable
 import click
 
-#globals
+# globals
 frequency_file = "plant_info.json"
 one_day = datetime.timedelta(days=1)
+output_file = "watering_schedule.txt"
 
 
 def get_frequency_table(filename):
@@ -80,7 +81,7 @@ def make_week(date_plant_dict):
     '''This takes the dictionary date_plant_dict and formats it into
     7 day increments so that it's easy to make pretty tables out of it'''
     dates = sorted(date_plant_dict.keys())
-    with open("Plant Schedule.txt", 'w') as file_:
+    with open(output_file, 'w') as file_:
         while dates:
             weekly_table = PrettyTable()
             header = []
@@ -112,9 +113,9 @@ def main(weeks, start_date):
     allows for dynamic starting days and lengths of time'''
     start_date = datetime.datetime.strptime(start_date, '%m-%d-%Y')
     plant_array = create_plant_array(weeks, start_date)
+    print("Your schedule is now available in 'watering_schedule.txt'")
     make_week(add_plant_to_day(start_date, plant_array, weeks))
 
 
 if __name__ == "__main__":
     main()
-    print("Your schedule is now available in 'Plant Schedule.txt'")
